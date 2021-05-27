@@ -1,36 +1,39 @@
 #pragma once
-using namespace std;
-#include <iostream>
-#include <fstream>
-#include <sstream>
+#include <queue>
 #include <string>
+#include <memory>
+#include <iostream>
 namespace ariel
 {
-
     template <typename T>
     class BinaryTree
     {
-
     private:
         struct Node
         {
-            T Val;
+
+            T valy;
             Node *left;
             Node *right;
             Node *parent;
-            Node(T valy) : Val(valy), left(NULL), right(NULL), parent(NULL){}
+            Node(T v, Node *nodeL = nullptr, Node *nodeR = nullptr, Node *nodeP = nullptr) : valy(v), left(nodeL), right(nodeR), parent(nodeP) {}
         };
+
         Node *root;
 
     public:
-        BinaryTree<T>(){ root(nullptr){}
-            this->root=nullptr;
-        }
-
+          BinaryTree<T>() : root(nullptr){};
         ~BinaryTree<T>(){};
 
-        BinaryTree &add_root(T root)
+        BinaryTree &add_root(T valy)
         {
+            //check if there is no root and create new one, otherwise replace the current 
+            if(root == nullptr){
+                    this->root = new Node(valy)
+            }
+              else{
+                        root->valy = valy;
+              }      
             return *this;
         }
         BinaryTree<T> &add_left(T parent, T left)
@@ -47,152 +50,159 @@ namespace ariel
             return os;
         };
        
-       
-        class preorder
-        {
 
+ class Preorder_iter
+        {
         private:
-            Node *pCurrent;
+            Node *current;
 
         public:
-            preorder(Node *ptr = nullptr)
-                : pCurrent(ptr){}
-
-            T &operator*() const
-            {return pCurrent->Val; }
-
-            T *operator->() const {
-                return &(ptr->Val);
-            }
-
-            preorder &operator++(){     return *this;  }
-
-            const preorder operator++(int) {
-                preorder temp = *this;
-                return temp;
-            }
-
-            bool operator==(const preorder &r) const
-            {
-                return pCurrent == r.pCurrent;
-            }
-
-            bool operator!=(const preorder &r) const
-            {
-                return pCurrent != r.pCurrent;
-            }
-        }; 
-        preorder begin_preorder()
-        {
-            return preorder{root};
-        }
-
-        preorder end_preorder()
-        {
-            return preorder{};
-        }
-        
-        
-        class inorder
-        {
-
-        private:
-            Node *pCurrent;
-
-        public:
-            inorder(Node *ptr = nullptr)
-                : pCurrent(ptr){}
-
-            T &operator*() const {
-                return pCurrent->Val; }
-
-            T *operator->() const{
-                return &(pCurrent->Val);  }
-
-            inorder &operator++()  {
-                return *this; }
-
-            const inorder operator++(int)
-            {
-              return *this;
-            }
-
-            bool operator==(const inorder &r) const
-            {
-                return pCurrent == r.pCurrent;
-            }
-
-            bool operator!=(const inorder &r) const
-            {
-                return pCurrent != r.pCurrent;
-            }
-                    postorder begin_postorder()
-        {
-            return postorder{root};
-        }
-
-        };
-        inorder begin_inorder()
-        {
-            return inorder{root};
-        }
-        inorder end_inorder()
-        {
-            
-            return inorder{};
-        }
-       
-       
-        class postorder
-        {
-
-        private:
-            Node *pCurrent;
-
-        public:
-            postorder(Node *ptr = nullptr)
-                : pCurrent(ptr) { }
+            Preorder_iter(Node *ptr = nullptr) : current(ptr){};
+            Preorder_iter(): current(nullptr){}
 
             T &operator*() const
             {
-                return pCurrent->Val;
+                return current->valy;
             }
 
-            T *operator->() const {
-                return &(pCurrent->Val);
+            T *operator->() const
+            {
+                return &(current->valy);
             }
-
-            postorder &operator++() {
+            Preorder_iter &operator++()
+            {
                 return *this;
             }
+            const Preorder_iter operator++(int)
+            {
+                return *this;
+            }
+            bool operator==(const Preorder_iter &other) const
+            {
+                return false;
+            }
 
-            const postorder operator++(int) {
-              return *this; }
-
-            bool operator==(const postorder &r) const {
-                return pCurrent == r.pCurrent; }
-
-            bool operator!=(const postorder &r) const{
-                return pCurrent != r.pCurrent;}
+            bool operator!=(const Preorder_iter &other) const
+            {
+                return false;
+            }
         };
-        postorder begin_postorder()
+         Preorder_iter end_preorder()
         {
-            return postorder{root};
+            return Preorder_iter(nullptr);
         }
-        postorder end_postorder()
+        Preorder_iter begin_preorder()
         {
-            // return nullptr;
-            return postorder{};
+            return Preorder_iter(root);
         }
-        inorder begin()
+ 
+
+        class Inorder_iter
+        {
+        private:
+            Node *current;
+
+        public:
+            Inorder_iter(Node *ptr = nullptr) : current(ptr){};
+            Inorder_iter(): current(nullptr){}
+
+
+            T &operator*() const
+            {
+                return current->valy;
+            }
+
+            T *operator->() const
+            {
+                return &(current->valy);
+            }
+            Inorder_iter &operator++()
+            {
+                return *this;
+            }
+            const Inorder_iter operator++(int)
+            {
+                return *this;
+            }
+            bool operator==(const Inorder_iter &other) const
+            {
+                return false;
+            }
+
+            bool operator!=(const Inorder_iter &other) const
+            {
+                return false;
+            }
+        };
+               Inorder_iter end_inorder()
+        {
+            return Inorder_iter(nullptr);
+        }
+        Inorder_iter begin_inorder()
+        {
+            return Inorder_iter(root);
+        }
+
+ 
+        class Postorder_iter
+        {
+        private:
+            Node *current;
+
+        public:
+            Postorder_iter(Node *ptr = nullptr) : current(ptr){};
+            Postorder_iter():current(nullptr){}
+
+
+            T &operator*() const
+            {
+                return current->valy;
+            }
+
+            T *operator->() const
+            {
+                return &(current->valy);
+            }
+            Postorder_iter &operator++()
+            {
+                return *this;
+            }
+            const Postorder_iter operator++(int)
+            {
+                return *this;
+            }
+            bool operator==(const Postorder_iter &other) const
+            {
+                return false;
+            }
+
+            bool operator!=(const Postorder_iter &other) const
+            {
+                return false;
+            }
+        };
+
+        Inorder_iter begin()
         {
             return begin_inorder();
         };
-        inorder end()
+        Inorder_iter end()
         {
             return end_inorder();
         };
+    
+        Postorder_iter end_postorder()
+        {
+            return Postorder_iter(root);
+        }
+        Postorder_iter begin_postorder()
+        {
+            return Postorder_iter(nullptr);
+        }
+    };
+}
 
-    }; 
 
-};
+
+
+

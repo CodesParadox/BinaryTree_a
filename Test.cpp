@@ -4,22 +4,36 @@
 using namespace std;
 using namespace ariel;
 
-TEST_CASE("add elements")
+TEST_CASE("adding elements")
 {
     BinaryTree<int> tri;
+    //CHECK_THROWS(tri.add_left(4));
     CHECK_NOTHROW(tri.add_root(0));
-
     CHECK_NOTHROW(tri.add_root(3).add_root(6));
     CHECK_NOTHROW(tri.add_root(0));
     CHECK_NOTHROW(tri.add_left(0, 3).add_right(0, 6));
-    CHECK_NOTHROW(tri.add_left(3, 4).add_right(6, 7));
 
-
-    CHECK_THROWS(tri.add_root('a'));
-    CHECK_THROWS(tri.add_left('a', 'b'));
-    CHECK_THROWS(tri.add_left(0, 'b'));
+    CHECK_THROWS(tri.add_root('x'));
+    CHECK_THROWS(tri.add_left(0, 'y'));
+    CHECK_THROWS(tri.add_left('x', 3));
 
 }
+TEST_CASE("char")
+{
+    BinaryTree<char> trChar;
+    CHECK_NOTHROW(trChar.add_root('m'));
+    CHECK_NOTHROW(trChar.add_right('m', 'x'));
+    CHECK_NOTHROW(trChar.add_right('x', 'y'));
+}
+// // TEST_CASE("Check char"){
+// //     BinaryTree<char>tr;
+// //     CHECK_THROWS(tr.add_right('x')); // dont have root yet
+// //     CHECK_THROWS(tr.add_root('a'));
+// //     CHECK_THROWS(tr.add_right('a','b'));
+// //     CHECK_THROWS(tr.add_left('a','sc');
+
+
+// // }
 
 
 
